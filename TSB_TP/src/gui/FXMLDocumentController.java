@@ -15,8 +15,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import tplogic.TPLogic;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /**
  * FXML Controller class
@@ -41,6 +44,8 @@ public class FXMLDocumentController implements Initializable {
     private TPLogic logic;
     @FXML
     private ListView<String> list_files;
+    @FXML
+    private TextField txt_wordToSearch;
 
     /**
      * Initializes the controller class.
@@ -52,12 +57,12 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void readFileClick(ActionEvent event) {
-
+        read();
     }
 
     @FXML
     private void searchClick(ActionEvent event) {
-
+        search();
     }
 
     private void read() {
@@ -68,8 +73,10 @@ public class FXMLDocumentController implements Initializable {
 
             if (file != null) {
                 palLeidas = logic.readFile(file);
-                
-
+                setTotalText(Integer.toString(logic.checkWordsCount()));
+                setFileList(logic.getFilesUsed());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Se agregaron " + palLeidas + " palabras.", ButtonType.OK);
+                alert.showAndWait();
             }
 
         } catch (Exception e) {
@@ -77,15 +84,27 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    private void search() {
+        String word = this.txt_wordToSearch.getText();
+        if (!word.isEmpty()) {
+            int result = logic.getWordFrecuency(word);
+
+            this.lbl_searchResult.setText(Integer.toString(result));
+            this.lbl_searchResult.setVisible(true);
+            this.lbl_frecuency.setVisible(true);
+
+        }
+    }
+
     private void setTotalText(String count) {
         this.lbl_wordCount.setText(count);
     }
-    
-    private void setFileList(ArrayList<File> files){
+
+    private void setFileList(ArrayList<File> files) {
         this.list_files.getItems().clear();
-        for (File file: files){
+        for (File file : files) {
             this.list_files.getItems().add(file.getName());
-            
+
         }
     }
 }
