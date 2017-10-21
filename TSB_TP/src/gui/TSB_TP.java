@@ -9,22 +9,34 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.stage.Stage;
+
+import java.io.File;
+import javafx.stage.FileChooser;
+import tplogic.TPLogic;
 
 /**
  *
  * @author estre
  */
 public class TSB_TP extends Application {
+
+    TPLogic logic = new TPLogic();
     
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
-        Scene scene = new Scene(root);
+        FileChooser fc = new FileChooser();
+        File file = fc.showOpenDialog(null);
         
-        stage.setScene(scene);
-        stage.show();
+        if (file != null) {
+            logic.readFile(file);
+        }else{
+            System.out.println("Error");
+        }
+        
     }
 
     /**

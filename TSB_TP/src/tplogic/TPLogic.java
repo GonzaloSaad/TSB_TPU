@@ -5,7 +5,10 @@
  */
 package tplogic;
 
+import fileparser.FileParser;
 import hashtable.TSBHashtable;
+import java.io.File;
+import java.io.FileNotFoundException;
 /**
  *
  * @author a4
@@ -15,6 +18,14 @@ public class TPLogic {
     private TSBHashtable<String,Integer> hashtable;
     
     public void readFile(String path){
+        
+    }
+    
+    public void readFile(File file) throws FileNotFoundException{
+        FileParser fp = new FileParser(file);
+        for (String pal: fp){
+            System.out.println(pal);
+        }
         
     }
     
