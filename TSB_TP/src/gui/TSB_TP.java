@@ -31,11 +31,17 @@ public class TSB_TP extends Application {
         FileChooser fc = new FileChooser();
         File file = fc.showOpenDialog(null);
         
-        if (file != null) {
+        try{
+            if (file != null) {
             logic.readFile(file);
         }else{
             System.out.println("Error");
         }
+        } catch (Exception e){
+            System.out.println("Error");
+            System.out.println(e.getMessage());
+        }
+        
         
     }
 

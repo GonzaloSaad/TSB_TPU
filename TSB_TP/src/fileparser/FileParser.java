@@ -10,7 +10,6 @@ package fileparser;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +17,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -39,12 +39,14 @@ public class FileParser implements Iterable<String>, Closeable {
      */
     public FileParser(String path) throws FileNotFoundException, NullPointerException {
         File file = new File(path);
-        sc = new Scanner(file,"UTF-8");
-
+        sc = new Scanner(file, "ISO-8859-1");
+        // ([a-z]+[0-9]+|[0-9]+[a-z]+)[a-z0-9]*\b|[^A-Za-z]+
+        //sc.skip("[^A-Za-z]+");
     }
 
     public FileParser(File file) throws FileNotFoundException {
-        sc = new Scanner(file,"UTF-8");
+        sc = new Scanner(file, "ISO-8859-1");
+
     }
 
     @Override
@@ -61,6 +63,7 @@ public class FileParser implements Iterable<String>, Closeable {
 
         @Override
         public boolean hasNext() {
+
             return sc.hasNext();
         }
 
@@ -69,7 +72,10 @@ public class FileParser implements Iterable<String>, Closeable {
             if (!hasNext()) {
                 throw new NoSuchElementException("No quedan mas palabras.");
             }
-            return sc.next();
+            
+            String pal = sc.next();
+            return pal.replaceAll("[^A-Za-z]+", "");
+
         }
 
         @Override
