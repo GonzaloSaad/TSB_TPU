@@ -28,19 +28,7 @@ public class TSB_TP extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
-        FileChooser fc = new FileChooser();
-        File file = fc.showOpenDialog(null);
         
-        try{
-            if (file != null) {
-            logic.readFile(file);
-        }else{
-            System.out.println("Error");
-        }
-        } catch (Exception e){
-            System.out.println("Error");
-            System.out.println(e.getMessage());
-        }
         
         
     }

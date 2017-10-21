@@ -9,31 +9,52 @@ import fileparser.FileParser;
 import hashtable.TSBHashtable;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 /**
  *
  * @author a4
  */
 public class TPLogic {
-    
-    private TSBHashtable<String,Integer> hashtable;
-    
-    public void readFile(String path){
-        
+    private ArrayList<File> filesUsed;
+    private TSBHashtable<String, Integer> hashtable;
+
+    public TPLogic() {
+        hashtable = new TSBHashtable();
+        filesUsed = new ArrayList();
     }
-    
-    public void readFile(File file) throws FileNotFoundException{
+
+    public int readFile(String path) throws FileNotFoundException {        
+        return readFile(new File(path));
+    }
+
+    public int readFile(File file) throws FileNotFoundException {
         FileParser fp = new FileParser(file);
-        for (String pal: fp){
-            System.out.println(pal);
-        }
+        int value;
+        int countPrev = hashtable.size();
         
+        for (String pal : fp) {
+            if (!pal.equals("")) {
+                value = hashtable.getOrDefault(pal, 0);
+                hashtable.put(pal, value + 1);
+            }
+        }
+        filesUsed.add(file);
+        return hashtable.size()- countPrev;
+
+    }
+
+    public int getWordFrecuency(String word) {
+        return hashtable.getOrDefault(word, 0);
+    }
+
+    public int checkWordsCount() {
+        return hashtable.size();
+    }
+
+    public ArrayList<File> getFilesUsed() {
+        return filesUsed;
     }
     
-    public int getWordFrecuency(String word){
-        return 0;
-    }
     
-    public int checkWordsCount(){
-        return 0;
-    }
 }

@@ -14,6 +14,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -59,6 +60,20 @@ public class FileParser implements Iterable<String>, Closeable {
         sc.close();
     }
 
+    private String stripAccents(String s) {
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return s;
+    }
+    
+    private String stripNonAlphabetic(String s){
+        return s.replaceAll("([a-z]+[0-9]+|[0-9]+[a-z]+)[a-z0-9]*\b|[^A-Za-z]+","" );
+    }
+    
+    private String cleanString(String s){
+        return stripNonAlphabetic(stripAccents(s));
+    }
+
     private class FileIterator implements Iterator<String> {
 
         @Override
@@ -71,10 +86,9 @@ public class FileParser implements Iterable<String>, Closeable {
         public String next() throws NoSuchElementException {
             if (!hasNext()) {
                 throw new NoSuchElementException("No quedan mas palabras.");
-            }
+            }          
             
-            String pal = sc.next();
-            return pal.replaceAll("[^A-Za-z]+", "");
+            return FileParser.this.cleanString(sc.next()).toLowerCase();
 
         }
 
